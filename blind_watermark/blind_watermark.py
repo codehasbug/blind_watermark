@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # coding=utf-8
-# @Time    : 2020/8/13
-# @Author  : github.com/guofei9987
+# @Time    : 2023/8/10
+# @Author  : github.com/guofei9987 github.com/codehasbug
+
 import warnings
 
 import numpy as np
@@ -13,7 +14,7 @@ from .version import bw_notes
 
 class WaterMark:
     def __init__(self, password_wm=1, password_img=1, block_shape=(4, 4), mode='common', processes=None):
-        bw_notes.print_notes()
+        # bw_notes.print_notes()
 
         self.bwm_core = WaterMarkCore(password_img=password_img, mode=mode, processes=processes)
 
@@ -21,6 +22,10 @@ class WaterMark:
 
         self.wm_bit = None
         self.wm_size = 0
+
+    # add a new read method in order to directly set image data to avoid io operation. 
+    def read_img_from_mat(self, img):
+        self.bwm_core.read_img_arr(img)
 
     def read_img(self, filename=None, img=None):
         if img is None:
@@ -52,6 +57,7 @@ class WaterMark:
         np.random.RandomState(self.password_wm).shuffle(self.wm_bit)
 
         self.bwm_core.read_wm(self.wm_bit)
+
 
     def embed(self, filename=None, compression_ratio=None):
         '''
